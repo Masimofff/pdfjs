@@ -5,8 +5,8 @@ var kbEpubSrc = '';
 var kbAdPushed = false;
 
 function kbStartPreview(pdfId, epubId, type) {
-  kbPdfSrc  = pdfId  ? 'https://drive.google.com/file/d/' + pdfId  + '/preview' : '';
-  kbEpubSrc = epubId ? 'https://drive.google.com/file/d/' + epubId + '/preview' : '';
+  kbPdfSrc  = pdfId  ? 'https://docs.google.com/viewer?srcid=' + pdfId  + '&pid=explorer&efh=false&a=v&chrome=false&embedded=true' : '';
+  kbEpubSrc = epubId ? 'https://docs.google.com/viewer?srcid=' + epubId + '&pid=explorer&efh=false&a=v&chrome=false&embedded=true' : '';
   kbPendingType = type;
   var ov      = document.getElementById('kb-ov');
   var num     = document.getElementById('kb-ov-num');
