@@ -3,11 +3,16 @@ var kbPendingType = '';
 var kbPdfId = '';
 var kbEpubId = '';
 var kbAdPushed = false;
+var kbNewWin = null;
 
 function kbStartPreview(pdfId, epubId, type) {
   kbPdfId = pdfId;
   kbEpubId = epubId;
   kbPendingType = type;
+
+  // Pəncərəni İNDİ aç — tıklama anında, bloklammır
+  kbNewWin = window.open('', '_blank');
+
   var ov      = document.getElementById('kb-ov');
   var num     = document.getElementById('kb-ov-num');
   var title   = document.getElementById('kb-ov-title');
@@ -24,10 +29,12 @@ function kbStartPreview(pdfId, epubId, type) {
   sup.style.display = 'block';
   ov.style.display = 'flex';
   document.body.style.overflow = 'hidden';
+
   if (!kbAdPushed) {
     try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
     kbAdPushed = true;
   }
+
   var c = 10;
   if (kbOvTimer) { clearInterval(kbOvTimer); }
   kbOvTimer = setInterval(function() {
@@ -37,14 +44,21 @@ function kbStartPreview(pdfId, epubId, type) {
       clearInterval(kbOvTimer);
       kbOvTimer = null;
       kbCloseOv();
-      var id = (kbPendingType == 'epub') ? kbEpubId : kbPdfId;
-      window.open('https://drive.google.com/file/d/' + id + '/preview', '_blank');
+      var id = '';
+      if (kbPendingType == 'epub') { id = kbEpubId; } else { id = kbPdfId; }
+      var url = 'https://drive.google.com/file/d/' + id + '/preview';
+      if (kbNewWin && !kbNewWin.closed) {
+        kbNewWin.location.href = url;
+      } else {
+        window.open(url, '_blank');
+      }
     }
   }, 1000);
 }
 
 function kbCloseOv() {
   if (kbOvTimer) { clearInterval(kbOvTimer); kbOvTimer = null; }
+  if (kbNewWin && !kbNewWin.closed) { kbNewWin.close(); }
   document.getElementById('kb-ov').style.display = 'none';
   document.body.style.overflow = '';
 }
@@ -52,5 +66,6 @@ function kbCloseOv() {
 function kbShowIframe(type) {}
 
 function kbCloseIframe() {
-  document.getElementById('kb-iframe-box').style.display = 'none';
+  var box = document.getElementById('kb-iframe-box');
+  if (box) { box.style.display = 'none'; }
 }
