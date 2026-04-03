@@ -1,12 +1,12 @@
 var kbOvTimer = null;
 var kbPendingType = '';
-var kbPdfSrc = '';
-var kbEpubSrc = '';
+var kbPdfId = '';
+var kbEpubId = '';
 var kbAdPushed = false;
 
 function kbStartPreview(pdfId, epubId, type) {
-  kbPdfSrc  = pdfId  ? 'https://docs.google.com/viewer?srcid=' + pdfId  + '&pid=explorer&efh=false&a=v&chrome=false&embedded=true' : '';
-  kbEpubSrc = epubId ? 'https://docs.google.com/viewer?srcid=' + epubId + '&pid=explorer&efh=false&a=v&chrome=false&embedded=true' : '';
+  kbPdfId = pdfId;
+  kbEpubId = epubId;
   kbPendingType = type;
   var ov      = document.getElementById('kb-ov');
   var num     = document.getElementById('kb-ov-num');
@@ -37,7 +37,8 @@ function kbStartPreview(pdfId, epubId, type) {
       clearInterval(kbOvTimer);
       kbOvTimer = null;
       kbCloseOv();
-      kbShowIframe(kbPendingType);
+      var id = (kbPendingType == 'epub') ? kbEpubId : kbPdfId;
+      window.open('https://drive.google.com/file/d/' + id + '/preview', '_blank');
     }
   }, 1000);
 }
@@ -48,20 +49,8 @@ function kbCloseOv() {
   document.body.style.overflow = '';
 }
 
-function kbShowIframe(type) {
-  var src = '';
-  if (type == 'epub') { src = kbEpubSrc; } else { src = kbPdfSrc; }
-  if (!src) { return; }
-  var box    = document.getElementById('kb-iframe-box');
-  var iframe = document.getElementById('kb-iframe');
-  var label  = document.getElementById('kb-iframe-label');
-  if (type == 'epub') { label.innerText = '📚 EPUB Önizləmə'; } else { label.innerText = '📖 PDF Önizləmə'; }
-  iframe.src = src;
-  box.style.display = 'block';
-  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
+function kbShowIframe(type) {}
 
 function kbCloseIframe() {
   document.getElementById('kb-iframe-box').style.display = 'none';
-  document.getElementById('kb-iframe').src = 'about:blank';
 }
