@@ -1,3 +1,5 @@
+<!-- DİQQƏT: Bunu Blogger-də köhnə Github <script src="..."> sətirinin yerinə yapışdır -->
+<script>
 var kbOvTimer = null;
 var kbPendingType = '';
 var kbPdfId = '';
@@ -32,10 +34,12 @@ function kbStartPreview(pdfId, epubId, type) {
   var c = 10;
   if (kbOvTimer) clearInterval(kbOvTimer);
   
+  // 10 saniye geri sayım
   kbOvTimer = setInterval(function() {
     c = c - 1;
     if (num) num.innerText = c;
     
+    // Geri sayım 0 olanda Linkə Keç düyməsini göstər
     if (c <= 0) {
       clearInterval(kbOvTimer);
       kbOvTimer = null;
@@ -48,6 +52,7 @@ function kbStartPreview(pdfId, epubId, type) {
   }, 1000);
 }
 
+// LİNKƏ KEÇ düyməsinə basılanda bura işləyəcək
 function kbOpenLink() {
   kbCloseOv();
   var id = (kbPendingType == 'epub') ? kbEpubId : kbPdfId;
@@ -55,6 +60,7 @@ function kbOpenLink() {
   window.open(url, '_blank');
 }
 
+// X-a basanda overlayi bağlamaq
 function kbCloseOv() {
   if (kbOvTimer) { clearInterval(kbOvTimer); kbOvTimer = null; }
   var ov = document.getElementById('kb-ov');
@@ -67,3 +73,4 @@ function kbCloseIframe() {
   var box = document.getElementById('kb-iframe-box');
   if (box) { box.style.display = 'none'; document.getElementById('kb-iframe').src = 'about:blank'; }
 }
+</script>
